@@ -6,7 +6,11 @@ public class PlayerOne : MonoBehaviour {
 	private float playerOneSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
-
+    public float KatanaRange;
+    public float KatanaAngle;
+    public GameObject Cone;
+    public float delay;
+    private GameObject AttackCone;
 	PlayerController controller;
 
 
@@ -32,6 +36,44 @@ public class PlayerOne : MonoBehaviour {
 			playerOneSpeed = normalSpeed;
 		}
 
+        Attack();
 	}
 
-}
+    void Attack ()
+    {
+        if(Input.GetButtonDown("Fire3"))
+        {
+            playerOneSpeed = 0;
+            sneakySpeed = 0;
+            Debug.Log("Slash");
+           AttackCone = (GameObject) Instantiate (Cone, transform.position, transform.rotation);
+            Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
+            StartCoroutine(DelayAttack());
+           MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
+           /* Mesh NewCone = new Mesh();
+            NewCone = new Mesh();
+            NewCone.vertices = KatanaRange;
+            */
+            //ConeMesh.sharedMesh = new Mesh();
+
+           // MeshCollider ConeRange = (MeshCollider)AttackCone.GetComponent<Collider>();
+            // ConeRange.size
+        }
+    }
+
+    IEnumerator DelayAttack ()
+    {
+        yield return new WaitForSeconds(delay);
+        playerOneSpeed = normalSpeed;
+        sneakySpeed = playerOneSpeed;
+        Destroy(AttackCone);
+    }
+
+    void OntriggerEnter( Collider other)
+    {
+        Debug.Log("Touche");
+        //Instantiate (Blood, other.transform.position, other.transform.rotataion)
+        Destroy(other.gameObject);
+    }
+
+} 
