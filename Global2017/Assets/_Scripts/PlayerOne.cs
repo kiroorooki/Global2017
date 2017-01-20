@@ -23,6 +23,7 @@ public class PlayerOne : MonoBehaviour {
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP1"), 0, Input.GetAxisRaw ("VerticalP1"));
 		Vector3 moveVelocity = moveInput.normalized * playerOneSpeed;
 		controller.Move (moveVelocity);
+		Debug.Log(Input.GetAxisRaw ("VerticalP1"));
 
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("Slow")) {
