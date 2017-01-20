@@ -6,16 +6,13 @@ public class PlayerOne : MonoBehaviour {
 	private float playerOneSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
+    public float KatanaRange;
+    public float KatanaAngle;
+    public GameObject Cone;
+    public float delay;
+    private GameObject AttackCone;
+	PlayerController controller;
 
-    float holdButtonTime = 0f;
-    public float maxForce = 2500f;
-    public float timeToMax = 1f;
-
-
-    PlayerController controller;
-    public Projectile projectile;
-
-    
 
 	void Start () {
 		playerOneSpeed = normalSpeed;
@@ -30,7 +27,6 @@ public class PlayerOne : MonoBehaviour {
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP1"), 0, Input.GetAxisRaw ("VerticalP1"));
 		Vector3 moveVelocity = moveInput.normalized * playerOneSpeed;
 		controller.Move (moveVelocity);
-		Debug.Log(Input.GetAxisRaw ("VerticalP1"));
 
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("Slow")) {
@@ -40,34 +36,44 @@ public class PlayerOne : MonoBehaviour {
 			playerOneSpeed = normalSpeed;
 		}
 
-        // projectiles
-        if (Input.GetButton("ThrowP1"))
+        Attack();
+	}
+
+    void Attack ()
+    {
+        if(Input.GetButtonDown("Fire3"))
         {
-            holdButtonTime += Time.deltaTime;
-            holdButtonTime = Mathf.Clamp(holdButtonTime, 0f, timeToMax);
+            playerOneSpeed = 0;
+            sneakySpeed = 0;
+            Debug.Log("Slash");
+           AttackCone = (GameObject) Instantiate (Cone, transform.position, transform.rotation);
+            Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
+            StartCoroutine(DelayAttack());
+           MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
+           /* Mesh NewCone = new Mesh();
+            NewCone = new Mesh();
+            NewCone.vertices = KatanaRange;
+            */
+            //ConeMesh.sharedMesh = new Mesh();
+
+           // MeshCollider ConeRange = (MeshCollider)AttackCone.GetComponent<Collider>();
+            // ConeRange.size
         }
-
-        if (Input.GetButtonUp("ThrowP1"))
-        {
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, (-1f) * Input.GetAxisRaw("ShootYP1"))) * (-1f);
-
-
-
-            if (direction != Vector3.zero)
-            {
-                Projectile e = Instantiate(projectile, transform.position, Quaternion.identity);
-                Physics.IgnoreCollision(e.GetComponent<Collider>(), GetComponent<Collider>());
-
-                direction = direction.normalized;
-                e.GetComponent<Rigidbody>().AddForce(direction * maxForce * holdButtonTime);
-
-                holdButtonTime = 0f;
-            }
-        }
-
-
     }
 
+    IEnumerator DelayAttack ()
+    {
+        yield return new WaitForSeconds(delay);
+        playerOneSpeed = normalSpeed;
+        sneakySpeed = playerOneSpeed;
+        Destroy(AttackCone);
+    }
 
+    void OntriggerEnter( Collider other)
+    {
+        Debug.Log("Touche");
+        //Instantiate (Blood, other.transform.position, other.transform.rotataion)
+        Destroy(other.gameObject);
+    }
 
-}
+} 
