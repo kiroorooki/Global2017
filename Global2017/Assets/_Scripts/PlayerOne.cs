@@ -7,8 +7,15 @@ public class PlayerOne : MonoBehaviour {
 	public float normalSpeed;
 	public float sneakySpeed;
 
-	PlayerController controller;
+    float holdButtonTime = 0f;
+    public float maxForce = 2500f;
+    public float timeToMax = 1f;
 
+
+    PlayerController controller;
+    public Projectile projectile;
+
+    
 
 	void Start () {
 		playerOneSpeed = normalSpeed;
@@ -32,6 +39,34 @@ public class PlayerOne : MonoBehaviour {
 			playerOneSpeed = normalSpeed;
 		}
 
-	}
+        // projectiles
+        if (Input.GetButton("ThrowP1"))
+        {
+            holdButtonTime += Time.deltaTime;
+            holdButtonTime = Mathf.Clamp(holdButtonTime, 0f, timeToMax);
+        }
+
+        if (Input.GetButtonUp("ThrowP1"))
+        {
+            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, (-1f) * Input.GetAxisRaw("ShootYP1"))) * (-1f);
+
+
+
+            if (direction != Vector3.zero)
+            {
+                Projectile e = Instantiate(projectile, transform.position, Quaternion.identity);
+                Physics.IgnoreCollision(e.GetComponent<Collider>(), GetComponent<Collider>());
+
+                direction = direction.normalized;
+                e.GetComponent<Rigidbody>().AddForce(direction * maxForce * holdButtonTime);
+
+                holdButtonTime = 0f;
+            }
+        }
+
+
+    }
+
+
 
 }
