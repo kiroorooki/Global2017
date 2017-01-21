@@ -14,6 +14,10 @@ public class SoundManager : MonoBehaviour {
     public List<AudioClip> blood;
     public List<AudioClip> deathYell;
 	public List<AudioClip> musics;
+    public List<AudioClip> menu_hover_sound;
+    AudioClip menu_select_sound;
+    AudioClip menu_select_menu_item;
+    AudioClip menu_start;
 
 
     void Awake()
