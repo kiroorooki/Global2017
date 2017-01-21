@@ -1,5 +1,6 @@
 fileFormatVersion: 2
 <<<<<<< HEAD
+<<<<<<< HEAD
 guid: 6f35a63a07944fd40901075e2c8f838d
 folderAsset: yes
 timeCreated: 1485017301
@@ -8,6 +9,11 @@ guid: d16987e1f04d3b34a95f21719128defa
 folderAsset: yes
 timeCreated: 1485017790
 >>>>>>> origin/Update_sounds
+=======
+guid: f431e31d527c76b4186d58a02d08feff
+folderAsset: yes
+timeCreated: 1485018000
+>>>>>>> origin/update_deplacement
 licenseType: Pro
 DefaultImporter:
   userData: 

@@ -21,7 +21,10 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
+        myRigidbody.velocity = Vector3.zero;
+        myRigidbody.angularVelocity = Vector3.zero;
+
+        myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
 
 	}
 }

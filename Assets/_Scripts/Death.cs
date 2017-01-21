@@ -32,7 +32,6 @@ public class Death : MonoBehaviour {
 
     void OnTriggerEnter (Collider other)
     {
-        Debug.Log("Touche");
 		if (other.tag == "Player") 
 		{
 			Destroy (other.gameObject);
