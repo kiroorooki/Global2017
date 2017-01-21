@@ -28,16 +28,16 @@ public class MenuManager : MonoBehaviour {
 	public GameObject WaitP2;
 	public GameObject WaitP3;
 	public GameObject WaitP4;
-	
+
 	public GameObject GameManager;
 
     public List<GameObject> ninjas = new List<GameObject>();
 
 	bool onNewGameMenu = false;
-	bool playerOneReady = false;
-	bool playerTwoReady = false;
-	bool playerThreeReady = false;
-	bool playerFourReady = false;
+	public bool playerOneReady = false;
+	public bool playerTwoReady = false;
+	public bool playerThreeReady = false;
+	public bool playerFourReady = false;
 	bool startGameUpdated = false;
 	
 	bool GameReady = false;
@@ -51,6 +51,9 @@ public class MenuManager : MonoBehaviour {
 	}
 
 	void Update() {
+
+		GameObject gameManager = GameObject.Find("GameManager");
+		GameManager gameScript = gameManager.GetComponent<GameManager>();
 
 		if (onNewGameMenu == true) {
             foreach (GameObject ninja in ninjas)
@@ -70,6 +73,8 @@ public class MenuManager : MonoBehaviour {
 				}
 			}
 			if (Input.GetButtonDown("SubmitP1") && playerOneReady == false) {
+				gameScript.player1Play = true;
+				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 1 Ready !");
 				WaitP1.SetActive(false);
 				ReadyP1Text.SetActive(true);
@@ -79,6 +84,8 @@ public class MenuManager : MonoBehaviour {
                 ninjas[0].GetComponent<NinjaRotation>().timer = 0.9f;
             }
 			if (Input.GetButtonDown("SubmitP2") && playerTwoReady == false) {
+				gameScript.player2Play = true;
+				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 2 Ready !");
 				WaitP2.SetActive(false);
 				ReadyP2Text.SetActive(true);
@@ -88,6 +95,8 @@ public class MenuManager : MonoBehaviour {
                 ninjas[1].GetComponent<NinjaRotation>().timer = 0.9f;
             }
 			if (Input.GetButtonDown("SubmitP3") && playerThreeReady == false) {
+				gameScript.player3Play = true;
+				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 3 Ready !");
 				WaitP3.SetActive(false);
 				ReadyP3Text.SetActive(true);
@@ -97,6 +106,8 @@ public class MenuManager : MonoBehaviour {
                 ninjas[2].GetComponent<NinjaRotation>().timer = 0.9f;
             }
 			if (Input.GetButtonDown("SubmitP4") && playerFourReady == false) {
+				gameScript.player4Play = true;
+				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 4 Ready !");
 				WaitP4.SetActive(false);
 				ReadyP4Text.SetActive(true);
@@ -130,6 +141,7 @@ public class MenuManager : MonoBehaviour {
 	}
 
 	public void NewGame() {
+		SoundManager.singleton.Play (SoundManager.singleton.menu_select_menu_item,1f,Camera.main.GetComponent<AudioSource> ());
         UnselectButton(selectedbutton);
         selectedbutton = null;
         onNewGameMenu = true;
