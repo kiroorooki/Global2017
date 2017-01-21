@@ -31,8 +31,6 @@ public class MenuManager : MonoBehaviour {
 	
 	public GameObject GameManager;
 
-    public Transform starttransform;
-
     public List<GameObject> ninjas = new List<GameObject>();
 
 	bool onNewGameMenu = false;
@@ -46,7 +44,11 @@ public class MenuManager : MonoBehaviour {
 	void Awake() {
         DontDestroyOnLoad(GameManager);
     }
-	
+
+	void Start() {
+		SoundManager.singleton.Play (SoundManager.singleton.musics [0], 1f, Camera.main.GetComponent<AudioSource> ());
+	}
+
 	void Update() {
 
 		if (onNewGameMenu == true) {
@@ -55,7 +57,6 @@ public class MenuManager : MonoBehaviour {
                 if(ninja.activeSelf == false)
                     ninja.SetActive(true);
             }
-
 			if (playersReady < 2) {
 				Debug.Log("Not Enough Players !");
 			} 
@@ -85,7 +86,7 @@ public class MenuManager : MonoBehaviour {
 				ReadyP3Text.SetActive(true);
 				playerThreeReady = true;
 				playersReady = playersReady+1;
-                ninjas[3].GetComponent<NinjaRotation>().RapidTurn();
+                ninjas[2].GetComponent<NinjaRotation>().RapidTurn();
             }
 			if (Input.GetButtonDown("SubmitP4") && playerFourReady == false) {
 				Debug.Log("Player 4 Ready !");
@@ -93,7 +94,7 @@ public class MenuManager : MonoBehaviour {
 				ReadyP4Text.SetActive(true);
 				playerFourReady = true;
 				playersReady = playersReady+1;
-                ninjas[4].GetComponent<NinjaRotation>().RapidTurn();
+                ninjas[3].GetComponent<NinjaRotation>().RapidTurn();
             }
 		}
 		if (onNewGameMenu == false) {
@@ -143,8 +144,10 @@ public class MenuManager : MonoBehaviour {
 	}
 
 	public void Back() {
+		onNewGameMenu = false;
+		GameReady = false;
+		playersReady = 0;
         UnselectButton(selectedbutton);
-        onNewGameMenu = false;
 		NewGameGroup.SetActive(false);
 		CreditsGroup.SetActive(false);
 		MenuGroup.SetActive(true);
@@ -163,8 +166,7 @@ public class MenuManager : MonoBehaviour {
             button.GetComponent<Text>().color = new Color(0.5f, 0, 0, 1);
             button.GetComponent<Transform>().transform.DOScale(1, 0.5f);
             //button.GetComponent<Transform>().transform.DORotate(new Vector3(0, 0, -10), 0.5f);
-        }else
-        {
+        } else {
             button.GetComponent<Text>().color = new Color(0.3f, 0.3f, 0.3f, 0.5f);
             button.GetComponent<Transform>().transform.DOScale(1, 0.5f);
         }

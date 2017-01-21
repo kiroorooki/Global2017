@@ -13,6 +13,7 @@ public class SoundManager : MonoBehaviour {
     public List<AudioClip> bladeWoosh;
     public List<AudioClip> blood;
     public List<AudioClip> deathYell;
+	public List<AudioClip> musics;
 
 
     void Awake()
