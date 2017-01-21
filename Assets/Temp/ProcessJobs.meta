@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 6f35a63a07944fd40901075e2c8f838d
 folderAsset: yes
 timeCreated: 1485017301
+=======
+guid: d16987e1f04d3b34a95f21719128defa
+folderAsset: yes
+timeCreated: 1485017790
+>>>>>>> origin/Update_sounds
 licenseType: Pro
 DefaultImporter:
   userData: 
