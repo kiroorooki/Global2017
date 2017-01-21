@@ -76,7 +76,8 @@ public class MenuManager : MonoBehaviour {
 				playerOneReady = true;
 				playersReady = playersReady+1;
                 ninjas[0].GetComponent<NinjaRotation>().RapidTurn();
-			}
+                ninjas[0].GetComponent<NinjaRotation>().timer = 0.9f;
+            }
 			if (Input.GetButtonDown("SubmitP2") && playerTwoReady == false) {
 				Debug.Log("Player 2 Ready !");
 				WaitP2.SetActive(false);
@@ -84,6 +85,7 @@ public class MenuManager : MonoBehaviour {
 				playerTwoReady = true;
 				playersReady = playersReady+1;
                 ninjas[1].GetComponent<NinjaRotation>().RapidTurn();
+                ninjas[1].GetComponent<NinjaRotation>().timer = 0.9f;
             }
 			if (Input.GetButtonDown("SubmitP3") && playerThreeReady == false) {
 				Debug.Log("Player 3 Ready !");
@@ -92,6 +94,7 @@ public class MenuManager : MonoBehaviour {
 				playerThreeReady = true;
 				playersReady = playersReady+1;
                 ninjas[2].GetComponent<NinjaRotation>().RapidTurn();
+                ninjas[2].GetComponent<NinjaRotation>().timer = 0.9f;
             }
 			if (Input.GetButtonDown("SubmitP4") && playerFourReady == false) {
 				Debug.Log("Player 4 Ready !");
@@ -100,6 +103,7 @@ public class MenuManager : MonoBehaviour {
 				playerFourReady = true;
 				playersReady = playersReady+1;
                 ninjas[3].GetComponent<NinjaRotation>().RapidTurn();
+                ninjas[3].GetComponent<NinjaRotation>().timer = 0.9f;
             }
 		}
 		if (onNewGameMenu == false) {
