@@ -38,6 +38,7 @@ public class MenuManager : MonoBehaviour {
 	bool playerTwoReady = false;
 	bool playerThreeReady = false;
 	bool playerFourReady = false;
+	bool startGameUpdated = false;
 	
 	bool GameReady = false;
 
@@ -63,6 +64,10 @@ public class MenuManager : MonoBehaviour {
 			if (playersReady >= 2) {
 				Debug.Log("2 Players: You Can Start !");
 				GameReady = true;
+				if (startGameUpdated == false) {
+					SelectButton (StartGameButton.transform.FindChild ("StartText").gameObject);
+					startGameUpdated = true;
+				}
 			}
 			if (Input.GetButtonDown("SubmitP1") && playerOneReady == false) {
 				Debug.Log("Player 1 Ready !");
@@ -104,6 +109,7 @@ public class MenuManager : MonoBehaviour {
                     ninja.SetActive(false);
             }
             playersReady = 0;
+			startGameUpdated = false;
 			playerOneReady = false;
 			playerTwoReady = false;
 			playerThreeReady = false;
