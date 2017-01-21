@@ -53,6 +53,7 @@ public class PlayerOne : MonoBehaviour {
 	void Update () {
 		// Déplacement Normal
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP1"), 0, Input.GetAxisRaw ("VerticalP1"));
+        
         Vector3 moveVelocity = moveInput.normalized * playerOneSpeed;
 		controller.Move (moveVelocity);    
 		if ((Input.GetAxisRaw ("HorizontalP1") == 0 && Input.GetAxisRaw ("VerticalP1") == 0) && isWalking) {
@@ -96,8 +97,7 @@ public class PlayerOne : MonoBehaviour {
 				e.wave = wave;
 				e.playeWaveGradientColor = playeWaveGradientColor;
                 Physics.IgnoreCollision(e.GetComponent<Collider>(), GetComponent<Collider>());
-
-                direction = direction.normalized;
+                
                 e.GetComponent<Rigidbody>().AddForce(direction * maxForce * holdButtonTime);
 
                 holdButtonTime = 0f;
@@ -117,7 +117,7 @@ public class PlayerOne : MonoBehaviour {
             playerOneSpeed = 0;
 			isSneaky = false;
             Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, -Input.GetAxisRaw("ShootYP1"))) * (-1f);
-            direction = direction.normalized;
+            
 
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
             AttackCone.transform.parent = transform;

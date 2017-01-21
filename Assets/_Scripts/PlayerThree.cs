@@ -96,8 +96,7 @@ public class PlayerThree : MonoBehaviour {
 				e.wave = wave;
 				e.playeWaveGradientColor = playeWaveGradientColor;
                 Physics.IgnoreCollision(e.GetComponent<Collider>(), GetComponent<Collider>());
-
-                direction = direction.normalized;
+                
                 e.GetComponent<Rigidbody>().AddForce(direction * maxForce * holdButtonTime);
 
                 holdButtonTime = 0f;
@@ -117,7 +116,6 @@ public class PlayerThree : MonoBehaviour {
             playerThreeSpeed = 0;
 			isSneaky = false;
             Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP3"), 0, -Input.GetAxisRaw("ShootYP3"))) * (-1f);
-            direction = direction.normalized;
 
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
             AttackCone.transform.parent = transform;
