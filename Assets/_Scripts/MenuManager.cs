@@ -13,7 +13,9 @@ public class MenuManager : MonoBehaviour {
 	public GameObject NewGameBack;
 	public GameObject CreditsBack;
 	public GameObject NewGameButton;
-	public GameObject StartGameText;
+	public GameObject StartGameButton;
+	
+	int playersReady = 0;
 	
 	public GameObject ReadyP1Text;
 	public GameObject ReadyP2Text;
@@ -41,42 +43,40 @@ public class MenuManager : MonoBehaviour {
 	
 	void Update() {
 		if (onNewGameMenu == true) {
-			if (playerOneReady == false && playerTwoReady == false) {
+			if (playersReady < 2) {
 				Debug.Log("Not Enough Players !");
-				StartGameText.SetActive(false);
 			} 
-			if (playerOneReady == true && playerTwoReady == true || playerThreeReady == true || playerFourReady == true) {
+			if (playersReady >= 2) {
 				Debug.Log("2 Players: You Can Start !");
-				StartGameText.SetActive(true);
 				GameReady = true;
 			}
-			if (Input.GetButtonDown("Submit")) {
+			if (Input.GetButtonDown("SubmitP1")) {
 				Debug.Log("Player 1 Ready !");
 				WaitP1.SetActive(false);
 				ReadyP1Text.SetActive(true);
 				playerOneReady = true;
+				playersReady = playersReady+1;
 			}
 			if (Input.GetButtonDown("SubmitP2")) {
 				Debug.Log("Player 2 Ready !");
 				WaitP2.SetActive(false);
 				ReadyP2Text.SetActive(true);
 				playerTwoReady = true;
+				playersReady = playersReady+1;
 			}
 			if (Input.GetButtonDown("SubmitP3")) {
 				Debug.Log("Player 3 Ready !");
 				WaitP3.SetActive(false);
 				ReadyP3Text.SetActive(true);
 				playerThreeReady = true;
+				playersReady = playersReady+1;
 			}
 			if (Input.GetButtonDown("SubmitP4")) {
 				Debug.Log("Player 4 Ready !");
 				WaitP4.SetActive(false);
 				ReadyP4Text.SetActive(true);
 				playerFourReady = true;
-			}
-			if (GameReady == true && Input.GetButtonDown("Start")) {
-				Debug.Log("GO !");
-				Application.LoadLevel("Main");
+				playersReady = playersReady+1;
 			}
 		}
 		if (onNewGameMenu == false) {
@@ -99,7 +99,14 @@ public class MenuManager : MonoBehaviour {
 		onNewGameMenu = true;
 		MenuGroup.SetActive(false);
 		NewGameGroup.SetActive(true);
-		EventSystem.current.GetComponent<EventSystem>().SetSelectedGameObject(NewGameBack);
+		EventSystem.current.GetComponent<EventSystem>().SetSelectedGameObject(StartGameButton);
+	}
+	
+	public void StartGame() {
+		if (GameReady == true) {
+			Debug.Log("GO !");
+			SceneManager.LoadScene("Main");
+		}
 	}
 
 	public void Credits() {
