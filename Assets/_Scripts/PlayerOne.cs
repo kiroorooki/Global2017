@@ -40,6 +40,8 @@ public class PlayerOne : MonoBehaviour {
 
 	public Gradient playeWaveGradientColor;
 
+    public GameObject SlashP1;
+    
     void Start () {
 		playerOneSpeed = normalSpeed;
 		myAudioSource = GetComponent<AudioSource> ();
@@ -109,7 +111,9 @@ public class PlayerOne : MonoBehaviour {
 		// Attaque
         if (Input.GetButtonDown("FireP1") && AttackON == false)
         {
-			GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
+            
+           
+            GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
 			newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
 			StopWalkSound ();
 			AttackSound ();
@@ -126,7 +130,11 @@ public class PlayerOne : MonoBehaviour {
             Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
             StartCoroutine(DelayAttack());
             MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
-            
+
+            GameObject SlashEffect = Instantiate(SlashP1, AttackCone.transform.position + AttackCone.transform.forward, AttackCone.transform.rotation);
+            SlashEffect.transform.parent = transform;
+            SlashEffect.transform.LookAt(transform.position + direction);
+            Destroy(SlashEffect.gameObject, 1);
         }
     }
 

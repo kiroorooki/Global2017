@@ -39,6 +39,7 @@ public class PlayerTwo : MonoBehaviour {
 	public GameObject wave;
 
 	public Gradient playeWaveGradientColor;
+    public GameObject SlashP2;
 
     void Start () {
 		playerTwoSpeed = normalSpeed;
@@ -126,7 +127,11 @@ public class PlayerTwo : MonoBehaviour {
             Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
             StartCoroutine(DelayAttack());
             MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
-            
+
+            GameObject SlashEffect = Instantiate(SlashP2, AttackCone.transform.position + AttackCone.transform.forward, Quaternion.identity);
+            SlashEffect.transform.parent = transform;
+            SlashEffect.transform.LookAt(transform.position + direction);
+            Destroy(SlashEffect.gameObject, 1);
         }
     }
 
