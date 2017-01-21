@@ -150,6 +150,8 @@ public class PlayerOne : MonoBehaviour {
     {
         Debug.Log("Touche " + other);
         //Instantiate (Blood, other.transform.position, other.transform.rotation)
+        int i = Random.Range(0, 1);
+        soundManager.Play(soundManager.blood[i], 1, myAudioSource);
         Destroy(other.gameObject);
     }
 
