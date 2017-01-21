@@ -22,6 +22,7 @@ public class PlayerOne : MonoBehaviour {
     public float delay;
 
     bool AttackON = false;
+	bool isSneaky = false;
 
     void Start () {
 		playerOneSpeed = normalSpeed;
@@ -35,23 +36,26 @@ public class PlayerOne : MonoBehaviour {
 		// Déplacement Normal
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP1"), 0, Input.GetAxisRaw ("VerticalP1"));
         Vector3 moveVelocity = moveInput.normalized * playerOneSpeed;
-		controller.Move (moveVelocity);
-        
+		controller.Move (moveVelocity);    
 
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("SlowP1")) {
 			playerOneSpeed = sneakySpeed;
+			isSneaky = true;
 		}
 		if (Input.GetButtonUp ("SlowP1")) {
 			playerOneSpeed = normalSpeed;
+			isSneaky = false;
 		}
+		
         AttackP1();
         Projectiles();
+		
 	}
-
+	
     void Projectiles()
     {
-        // projectiles
+        // Projectiles
         if (Input.GetButton("ThrowP1"))
         {
             holdButtonTime += Time.deltaTime;
@@ -73,15 +77,14 @@ public class PlayerOne : MonoBehaviour {
             }
         }
     }
-    void AttackP1 ()
+    void AttackP1()
     {
+		// Attaque
         if (Input.GetButtonDown("FireP1") && !AttackON)
         {
             AttackON = true;
-            print("FireP1");
             playerOneSpeed = 0;
             sneakySpeed = 0;
-            Debug.Log("Slash");
             Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, -Input.GetAxisRaw("ShootYP1"))) * (-1f);
             direction = direction.normalized;
 
@@ -107,8 +110,8 @@ public class PlayerOne : MonoBehaviour {
 
     void OntriggerEnter(Collider other)
     {
-        Debug.Log("Touche");
-        //Instantiate (Blood, other.transform.position, other.transform.rotataion)
+        Debug.Log("Touche " + other);
+        //Instantiate (Blood, other.transform.position, other.transform.rotation)
         Destroy(other.gameObject);
     }
 

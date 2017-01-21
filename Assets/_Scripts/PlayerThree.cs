@@ -22,6 +22,7 @@ public class PlayerThree : MonoBehaviour {
     public float delay;
 
     bool AttackON = false;
+	bool isSneaky = false;
 
     void Start () {
 		playerThreeSpeed = normalSpeed;
@@ -40,17 +41,21 @@ public class PlayerThree : MonoBehaviour {
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("SlowP3")) {
 			playerThreeSpeed = sneakySpeed;
+			isSneaky = true;
 		}
 		if (Input.GetButtonUp ("SlowP3")) {
 			playerThreeSpeed = normalSpeed;
+			isSneaky = false;
 		}
-        AttackP2();
+		
+        AttackP3();
         Projectiles();
+		
     }
 
     void Projectiles()
     {
-        // projectiles
+        // Projectiles
         if (Input.GetButton("ThrowP3"))
         {
             holdButtonTime += Time.deltaTime;
@@ -72,15 +77,14 @@ public class PlayerThree : MonoBehaviour {
             }
         }
     }
-    void AttackP2()
+    void AttackP3()
     {
+		// Attaque
         if (Input.GetButtonDown("FireP3") && !AttackON) 
         {
             AttackON = true;
-            print("FireP3");
             playerThreeSpeed = 0;
             sneakySpeed = 0;
-            Debug.Log("Slash");
             Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP3"), 0, -Input.GetAxisRaw("ShootYP3"))) * (-1f);
             direction = direction.normalized;
 
@@ -106,8 +110,8 @@ public class PlayerThree : MonoBehaviour {
 
     void OntriggerEnter(Collider other)
     {
-        Debug.Log("Touche");
-        //Instantiate (Blood, other.transform.position, other.transform.rotataion)
+        Debug.Log("Touche " + other);
+        //Instantiate (Blood, other.transform.position, other.transform.rotation)
         Destroy(other.gameObject);
     }
 

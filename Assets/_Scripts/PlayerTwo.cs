@@ -22,6 +22,7 @@ public class PlayerTwo : MonoBehaviour {
     public float delay;
 
     bool AttackON = false;
+	bool isSneaky = false;
 
     void Start () {
 		playerTwoSpeed = normalSpeed;
@@ -40,17 +41,21 @@ public class PlayerTwo : MonoBehaviour {
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("SlowP2")) {
 			playerTwoSpeed = sneakySpeed;
+			isSneaky = true;
 		}
 		if (Input.GetButtonUp ("SlowP2")) {
 			playerTwoSpeed = normalSpeed;
+			isSneaky = false;
 		}
+		
         AttackP2();
         Projectiles();
+		
     }
 
     void Projectiles()
     {
-        // projectiles
+        // Projectiles
         if (Input.GetButton("ThrowP2"))
         {
             holdButtonTime += Time.deltaTime;
@@ -74,13 +79,12 @@ public class PlayerTwo : MonoBehaviour {
     }
     void AttackP2()
     {
+		// Attaque
         if (Input.GetButtonDown("FireP2") && !AttackON) 
         {
             AttackON = true;
-            print("FireP2");
             playerTwoSpeed = 0;
             sneakySpeed = 0;
-            Debug.Log("Slash");
             Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP2"), 0, -Input.GetAxisRaw("ShootYP2"))) * (-1f);
             direction = direction.normalized;
 
@@ -106,8 +110,8 @@ public class PlayerTwo : MonoBehaviour {
 
     void OntriggerEnter(Collider other)
     {
-        Debug.Log("Touche");
-        //Instantiate (Blood, other.transform.position, other.transform.rotataion)
+        Debug.Log("Touche " + other);
+        //Instantiate (Blood, other.transform.position, other.transform.rotation)
         Destroy(other.gameObject);
     }
 
