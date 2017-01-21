@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d7ebc460db684e444b2a3e5241944e12
-timeCreated: 1485026259
+guid: f145da86b9f4a40479c8037e250e6f87
+timeCreated: 1484995680
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: RocherGrand
+    4300000: Box001
+    4300002: Cerisier1
   materials:
     importMaterials: 1
     materialName: 0

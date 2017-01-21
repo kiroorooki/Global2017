@@ -31,3 +31,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Global2017/Library/shadercompiler-UnityShaderCompiler.exe0.log
+Assets/Assets.meta
+Assets/Temp.meta~HEAD.meta
+Assets/_Prefabs/GameManager.prefab.meta
+Assets/_Sounds/Menu/Select_menu_item.ogg.meta
