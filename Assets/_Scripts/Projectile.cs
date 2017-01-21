@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
     
+	public GameObject wave;
+	public Gradient playeWaveGradientColor;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -14,5 +17,11 @@ public class Projectile : MonoBehaviour {
 		
 	}
 
+
+	void OnCollisionEnter(Collision other) {
+		Destroy (gameObject);
+		GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
+		newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
+	}
 
 }

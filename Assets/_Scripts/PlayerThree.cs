@@ -16,7 +16,7 @@ public class PlayerThree : MonoBehaviour {
     public Projectile projectile;
 
     private GameObject AttackCone;
-    
+
     public float KatanaRange;
     public float KatanaAngle;
     public GameObject Cone;
@@ -24,7 +24,6 @@ public class PlayerThree : MonoBehaviour {
 
     bool AttackON = false;
 	bool isSneaky = false;
-
 
 	bool isWalkingOnWood = false;
 	bool isWalkingOnWater = false;
@@ -35,6 +34,11 @@ public class PlayerThree : MonoBehaviour {
 	AudioSource myAudioSource;
 	SoundManager soundManager;
 	WaitForSeconds walkWait = new WaitForSeconds(0.4f);
+	WaitForSeconds walkWaitSneaky = new WaitForSeconds(1f);
+
+	public GameObject wave;
+
+	public Gradient playeWaveGradientColor;
 
     void Start () {
 		playerThreeSpeed = normalSpeed;
@@ -49,8 +53,8 @@ public class PlayerThree : MonoBehaviour {
 	void Update () {
 		// Déplacement Normal
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP3"), 0, Input.GetAxisRaw ("VerticalP3"));
-		Vector3 moveVelocity = moveInput.normalized * playerThreeSpeed;
-		controller.Move (moveVelocity);
+        Vector3 moveVelocity = moveInput.normalized * playerThreeSpeed;
+		controller.Move (moveVelocity);    
 		if ((Input.GetAxisRaw ("HorizontalP3") == 0 && Input.GetAxisRaw ("VerticalP3") == 0) && isWalking) {
 			StopWalkSound ();
 		} else if (!isWalking && (Input.GetAxisRaw ("HorizontalP3") != 0 || Input.GetAxisRaw ("VerticalP3") != 0) && !AttackON) {
@@ -58,8 +62,9 @@ public class PlayerThree : MonoBehaviour {
 			isWalking = true;
 		}
 
+
 		// Déplacement Sneaky
-		if (Input.GetButtonDown ("SlowP3")) {
+		if (Input.GetButtonDown ("SlowP3") && AttackON == false) {
 			playerThreeSpeed = sneakySpeed;
 			isSneaky = true;
 		}
@@ -71,8 +76,8 @@ public class PlayerThree : MonoBehaviour {
         AttackP3();
         Projectiles();
 		
-    }
-
+	}
+	
     void Projectiles()
     {
         // Projectiles
@@ -88,6 +93,8 @@ public class PlayerThree : MonoBehaviour {
             if (direction != Vector3.zero)
             {
                 Projectile e = Instantiate(projectile, transform.position, Quaternion.identity);
+				e.wave = wave;
+				e.playeWaveGradientColor = playeWaveGradientColor;
                 Physics.IgnoreCollision(e.GetComponent<Collider>(), GetComponent<Collider>());
 
                 direction = direction.normalized;
@@ -100,11 +107,15 @@ public class PlayerThree : MonoBehaviour {
     void AttackP3()
     {
 		// Attaque
-        if (Input.GetButtonDown("FireP3") && !AttackON) 
+        if (Input.GetButtonDown("FireP3") && AttackON == false)
         {
+			GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
+			newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
+			StopWalkSound ();
+			AttackSound ();
             AttackON = true;
             playerThreeSpeed = 0;
-            sneakySpeed = 0;
+			isSneaky = false;
             Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP3"), 0, -Input.GetAxisRaw("ShootYP3"))) * (-1f);
             direction = direction.normalized;
 
@@ -115,7 +126,7 @@ public class PlayerThree : MonoBehaviour {
             Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
             StartCoroutine(DelayAttack());
             MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
-
+            
         }
     }
 
@@ -123,7 +134,6 @@ public class PlayerThree : MonoBehaviour {
     {
         yield return new WaitForSeconds(delay);
         playerThreeSpeed = normalSpeed;
-        sneakySpeed = playerThreeSpeed;
         Destroy(AttackCone);
         AttackON = false;
     }
@@ -135,13 +145,12 @@ public class PlayerThree : MonoBehaviour {
         Destroy(other.gameObject);
     }
 
-
 	void AttackSound(){
 		int soundId;
 		soundId = Random.Range (0, soundManager.bladeWoosh.Count - 1);
 		soundManager.Play (soundManager.bladeWoosh [soundId], 1, myAudioSource);
 	}
-
+		
 	IEnumerator Walk(){
 		for (;;) {
 			int soundId;
@@ -156,7 +165,12 @@ public class PlayerThree : MonoBehaviour {
 				walkSound = soundManager.footStepGround;
 			soundId = Random.Range (0, walkSound.Count - 1);
 			soundManager.Play (walkSound [soundId], 1, myAudioSource);
-			yield return walkWait;
+			if (!isSneaky) { // pop onde
+				GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
+				newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
+			}
+			if(!isSneaky) yield return walkWait;
+			else yield return walkWaitSneaky;
 		}
 
 	}
@@ -167,4 +181,5 @@ public class PlayerThree : MonoBehaviour {
 	}
 
 
-}
+
+} 
