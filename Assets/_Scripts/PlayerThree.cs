@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerTwo : MonoBehaviour {
+public class PlayerThree : MonoBehaviour {
 
-	private float playerTwoSpeed;
+	private float playerThreeSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
 
@@ -24,7 +24,7 @@ public class PlayerTwo : MonoBehaviour {
     bool AttackON = false;
 
     void Start () {
-		playerTwoSpeed = normalSpeed;
+		playerThreeSpeed = normalSpeed;
 	}
 
 	void Awake() {
@@ -33,16 +33,16 @@ public class PlayerTwo : MonoBehaviour {
 
 	void Update () {
 		// Déplacement Normal
-		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP2"), 0, Input.GetAxisRaw ("VerticalP2"));
-		Vector3 moveVelocity = moveInput.normalized * playerTwoSpeed;
+		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP3"), 0, Input.GetAxisRaw ("VerticalP3"));
+		Vector3 moveVelocity = moveInput.normalized * playerThreeSpeed;
 		controller.Move (moveVelocity);
 
 		// Déplacement Sneaky
-		if (Input.GetButtonDown ("SlowP2")) {
-			playerTwoSpeed = sneakySpeed;
+		if (Input.GetButtonDown ("SlowP3")) {
+			playerThreeSpeed = sneakySpeed;
 		}
-		if (Input.GetButtonUp ("SlowP2")) {
-			playerTwoSpeed = normalSpeed;
+		if (Input.GetButtonUp ("SlowP3")) {
+			playerThreeSpeed = normalSpeed;
 		}
         AttackP2();
         Projectiles();
@@ -51,15 +51,15 @@ public class PlayerTwo : MonoBehaviour {
     void Projectiles()
     {
         // projectiles
-        if (Input.GetButton("ThrowP2"))
+        if (Input.GetButton("ThrowP3"))
         {
             holdButtonTime += Time.deltaTime;
             holdButtonTime = Mathf.Clamp(holdButtonTime, 0f, timeToMax);
         }
 
-        if (Input.GetButtonUp("ThrowP2"))
+        if (Input.GetButtonUp("ThrowP3"))
         {
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP2"), 0, -Input.GetAxisRaw("ShootYP2"))) * (-1f);
+            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP3"), 0, -Input.GetAxisRaw("ShootYP3"))) * (-1f);
             if (direction != Vector3.zero)
             {
                 Projectile e = Instantiate(projectile, transform.position, Quaternion.identity);
@@ -74,14 +74,14 @@ public class PlayerTwo : MonoBehaviour {
     }
     void AttackP2()
     {
-        if (Input.GetButtonDown("FireP2") && !AttackON) 
+        if (Input.GetButtonDown("FireP3") && !AttackON) 
         {
             AttackON = true;
-            print("FireP2");
-            playerTwoSpeed = 0;
+            print("FireP3");
+            playerThreeSpeed = 0;
             sneakySpeed = 0;
             Debug.Log("Slash");
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP2"), 0, -Input.GetAxisRaw("ShootYP2"))) * (-1f);
+            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP3"), 0, -Input.GetAxisRaw("ShootYP3"))) * (-1f);
             direction = direction.normalized;
 
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
@@ -98,8 +98,8 @@ public class PlayerTwo : MonoBehaviour {
     IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(delay);
-        playerTwoSpeed = normalSpeed;
-        sneakySpeed = playerTwoSpeed;
+        playerThreeSpeed = normalSpeed;
+        sneakySpeed = playerThreeSpeed;
         Destroy(AttackCone);
         AttackON = false;
     }
