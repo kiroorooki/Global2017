@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
 
-    SoundManager singleton;
+    public static SoundManager singleton;
 
     public List<AudioClip> footStepGround;
     public List<AudioClip> footStepWater;
@@ -22,7 +22,7 @@ public class SoundManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
@@ -31,7 +31,7 @@ public class SoundManager : MonoBehaviour {
 	}
 
 
-    public void PlayOneShot(AudioClip audioClip, float volume, AudioSource audioSource)
+    public void Play(AudioClip audioClip, float volume, AudioSource audioSource)
     {
             audioSource.PlayOneShot(audioClip, volume);
     }

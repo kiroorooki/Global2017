@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerThree : MonoBehaviour {
 
@@ -24,8 +25,21 @@ public class PlayerThree : MonoBehaviour {
     bool AttackON = false;
 	bool isSneaky = false;
 
+
+	bool isWalkingOnWood = false;
+	bool isWalkingOnWater = false;
+	bool isWalkingOnGrass = false;
+
+	bool isWalking = false;
+
+	AudioSource myAudioSource;
+	SoundManager soundManager;
+	WaitForSeconds walkWait = new WaitForSeconds(0.4f);
+
     void Start () {
 		playerThreeSpeed = normalSpeed;
+		myAudioSource = GetComponent<AudioSource> ();
+		soundManager = SoundManager.singleton;
 	}
 
 	void Awake() {
@@ -37,6 +51,12 @@ public class PlayerThree : MonoBehaviour {
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP3"), 0, Input.GetAxisRaw ("VerticalP3"));
 		Vector3 moveVelocity = moveInput.normalized * playerThreeSpeed;
 		controller.Move (moveVelocity);
+		if ((Input.GetAxisRaw ("HorizontalP3") == 0 && Input.GetAxisRaw ("VerticalP3") == 0) && isWalking) {
+			StopWalkSound ();
+		} else if (!isWalking && (Input.GetAxisRaw ("HorizontalP3") != 0 || Input.GetAxisRaw ("VerticalP3") != 0) && !AttackON) {
+			StartCoroutine ("Walk");
+			isWalking = true;
+		}
 
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("SlowP3")) {
@@ -114,5 +134,37 @@ public class PlayerThree : MonoBehaviour {
         //Instantiate (Blood, other.transform.position, other.transform.rotation)
         Destroy(other.gameObject);
     }
+
+
+	void AttackSound(){
+		int soundId;
+		soundId = Random.Range (0, soundManager.bladeWoosh.Count - 1);
+		soundManager.Play (soundManager.bladeWoosh [soundId], 1, myAudioSource);
+	}
+
+	IEnumerator Walk(){
+		for (;;) {
+			int soundId;
+			List<AudioClip> walkSound;
+			if (isWalkingOnWood)
+				walkSound = soundManager.footStepWood;
+			else if (isWalkingOnWater)
+				walkSound = soundManager.footStepWater;
+			else if (isWalkingOnGrass)
+				walkSound = soundManager.footStepGrass;
+			else
+				walkSound = soundManager.footStepGround;
+			soundId = Random.Range (0, walkSound.Count - 1);
+			soundManager.Play (walkSound [soundId], 1, myAudioSource);
+			yield return walkWait;
+		}
+
+	}
+
+	void StopWalkSound(){
+		StopCoroutine ("Walk");
+		isWalking = false;
+	}
+
 
 }
