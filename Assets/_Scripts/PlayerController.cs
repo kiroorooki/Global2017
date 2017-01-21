@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate() {
         myRigidbody.velocity = Vector3.zero;
-        myRigidbody.inertiaTensorRotation = Quaternion.identity;
+        myRigidbody.angularVelocity = Vector3.zero;
 
         myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
 

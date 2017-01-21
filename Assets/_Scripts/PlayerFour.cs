@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerFour : MonoBehaviour {
+public class PlayerFour : MonoBehaviour
+{
 
-	private float playerFourSpeed;
-	public float normalSpeed;
-	public float sneakySpeed;
+    private float playerSpeed;
+    public float normalSpeed;
+    public float sneakySpeed;
 
     float holdButtonTime = 0f;
     public float maxForce;
@@ -23,61 +24,78 @@ public class PlayerFour : MonoBehaviour {
     public float delay;
 
     bool AttackON = false;
-	bool isSneaky = false;
+    bool isSneaky = false;
 
-	bool isWalkingOnWood = false;
-	bool isWalkingOnWater = false;
-	bool isWalkingOnGrass = false;
+    bool isWalkingOnWood = false;
+    bool isWalkingOnWater = false;
+    bool isWalkingOnGrass = false;
 
-	bool isWalking = false;
+    bool isWalking = false;
 
-	AudioSource myAudioSource;
-	SoundManager soundManager;
-	WaitForSeconds walkWait = new WaitForSeconds(0.4f);
-	WaitForSeconds walkWaitSneaky = new WaitForSeconds(1f);
+    Vector3 direction = Vector3.zero;
 
-	public GameObject wave;
+    AudioSource myAudioSource;
+    SoundManager soundManager;
+    WaitForSeconds walkWait = new WaitForSeconds(0.4f);
+    WaitForSeconds walkWaitSneaky = new WaitForSeconds(1f);
 
-	public Gradient playeWaveGradientColor;
+    public GameObject wave;
 
-    void Start () {
-		playerFourSpeed = normalSpeed;
-		myAudioSource = GetComponent<AudioSource> ();
-		soundManager = SoundManager.singleton;
-	}
+    public Gradient playeWaveGradientColor;
 
-	void Awake() {
-		controller = GetComponent<PlayerController> ();
-	}
+    void Start()
+    {
+        playerSpeed = normalSpeed;
+        myAudioSource = GetComponent<AudioSource>();
+        soundManager = SoundManager.singleton;
+    }
 
-	void Update () {
-		// Déplacement Normal
-		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP4"), 0, Input.GetAxisRaw ("VerticalP4"));
-        Vector3 moveVelocity = moveInput.normalized * playerFourSpeed;
-		controller.Move (moveVelocity);    
-		if ((Input.GetAxisRaw ("HorizontalP4") == 0 && Input.GetAxisRaw ("VerticalP4") == 0) && isWalking) {
-			StopWalkSound ();
-		} else if (!isWalking && (Input.GetAxisRaw ("HorizontalP4") != 0 || Input.GetAxisRaw ("VerticalP4") != 0) && !AttackON) {
-			StartCoroutine ("Walk");
-			isWalking = true;
-		}
+    void Awake()
+    {
+        controller = GetComponent<PlayerController>();
+    }
+
+    void Update()
+    {
+        // Déplacement Normal
+        Vector3 moveInput = new Vector3(Input.GetAxisRaw("HorizontalP4"), 0, Input.GetAxisRaw("VerticalP4"));
+
+        Vector3 moveVelocity = moveInput.normalized * playerSpeed;
+        controller.Move(moveVelocity);
+        if ((Input.GetAxisRaw("HorizontalP4") == 0 && Input.GetAxisRaw("VerticalP4") == 0) && isWalking)
+        {
+            StopWalkSound();
+        }
+        else if (!isWalking && (Input.GetAxisRaw("HorizontalP4") != 0 || Input.GetAxisRaw("VerticalP4") != 0) && !AttackON)
+        {
+            StartCoroutine("Walk");
+            isWalking = true;
+        }
 
 
-		// Déplacement Sneaky
-		if (Input.GetButtonDown ("SlowP4") && AttackON == false) {
-			playerFourSpeed = sneakySpeed;
-			isSneaky = true;
-		}
-		if (Input.GetButtonUp ("SlowP4")) {
-			playerFourSpeed = normalSpeed;
-			isSneaky = false;
-		}
-		
+        // Déplacement Sneaky
+        if (Input.GetButtonDown("SlowP4") && AttackON == false)
+        {
+            playerSpeed = sneakySpeed;
+            isSneaky = true;
+        }
+        if (Input.GetButtonUp("SlowP4"))
+        {
+            playerSpeed = normalSpeed;
+            isSneaky = false;
+        }
+
+
+        if (Input.GetAxisRaw("ShootXP4") != 0 || Input.GetAxisRaw("ShootYP4") != 0)
+            direction = (new Vector3(Input.GetAxisRaw("ShootXP4"), 0, -Input.GetAxisRaw("ShootYP4"))) * (-1f);
+
         AttackP4();
         Projectiles();
-		
-	}
-	
+
+
+
+    }
+
     void Projectiles()
     {
         // Projectiles
@@ -89,14 +107,14 @@ public class PlayerFour : MonoBehaviour {
 
         if (Input.GetButtonUp("ThrowP4"))
         {
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP4"), 0, -Input.GetAxisRaw("ShootYP4"))) * (-1f);
+
             if (direction != Vector3.zero)
             {
                 Projectile e = Instantiate(projectile, transform.position, Quaternion.identity);
-				e.wave = wave;
-				e.playeWaveGradientColor = playeWaveGradientColor;
+                e.wave = wave;
+                e.playeWaveGradientColor = playeWaveGradientColor;
                 Physics.IgnoreCollision(e.GetComponent<Collider>(), GetComponent<Collider>());
-                
+
                 e.GetComponent<Rigidbody>().AddForce(direction * maxForce * holdButtonTime);
 
                 holdButtonTime = 0f;
@@ -105,17 +123,17 @@ public class PlayerFour : MonoBehaviour {
     }
     void AttackP4()
     {
-		// Attaque
+        // Attaque
         if (Input.GetButtonDown("FireP4") && AttackON == false)
         {
-			GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
-			newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
-			StopWalkSound ();
-			AttackSound ();
+            GameObject newWave = Instantiate(wave, transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity);
+            newWave.GetComponent<WaveBehav>().colorOverLifeTime = playeWaveGradientColor;
+            StopWalkSound();
+            AttackSound();
             AttackON = true;
-            playerFourSpeed = 0;
-			isSneaky = false;
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP4"), 0, -Input.GetAxisRaw("ShootYP4"))) * (-1f);
+            playerSpeed = 0;
+            isSneaky = false;
+
 
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
             AttackCone.transform.parent = transform;
@@ -124,14 +142,14 @@ public class PlayerFour : MonoBehaviour {
             Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
             StartCoroutine(DelayAttack());
             MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
-            
+
         }
     }
 
     IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(delay);
-        playerFourSpeed = normalSpeed;
+        playerSpeed = normalSpeed;
         Destroy(AttackCone);
         AttackON = false;
     }
@@ -143,41 +161,46 @@ public class PlayerFour : MonoBehaviour {
         Destroy(other.gameObject);
     }
 
-	void AttackSound(){
-		int soundId;
-		soundId = Random.Range (0, soundManager.bladeWoosh.Count - 1);
-		soundManager.Play (soundManager.bladeWoosh [soundId], 1, myAudioSource);
-	}
-		
-	IEnumerator Walk(){
-		for (;;) {
-			int soundId;
-			List<AudioClip> walkSound;
-			if (isWalkingOnWood)
-				walkSound = soundManager.footStepWood;
-			else if (isWalkingOnWater)
-				walkSound = soundManager.footStepWater;
-			else if (isWalkingOnGrass)
-				walkSound = soundManager.footStepGrass;
-			else
-				walkSound = soundManager.footStepGround;
-			soundId = Random.Range (0, walkSound.Count - 1);
-			soundManager.Play (walkSound [soundId], 1, myAudioSource);
-			if (!isSneaky) { // pop onde
-				GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
-				newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
-			}
-			if(!isSneaky) yield return walkWait;
-			else yield return walkWaitSneaky;
-		}
+    void AttackSound()
+    {
+        int soundId;
+        soundId = Random.Range(0, soundManager.bladeWoosh.Count - 1);
+        soundManager.Play(soundManager.bladeWoosh[soundId], 1, myAudioSource);
+    }
 
-	}
+    IEnumerator Walk()
+    {
+        for (;;)
+        {
+            int soundId;
+            List<AudioClip> walkSound;
+            if (isWalkingOnWood)
+                walkSound = soundManager.footStepWood;
+            else if (isWalkingOnWater)
+                walkSound = soundManager.footStepWater;
+            else if (isWalkingOnGrass)
+                walkSound = soundManager.footStepGrass;
+            else
+                walkSound = soundManager.footStepGround;
+            soundId = Random.Range(0, walkSound.Count - 1);
+            soundManager.Play(walkSound[soundId], 1, myAudioSource);
+            if (!isSneaky)
+            { // pop onde
+                GameObject newWave = Instantiate(wave, transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity);
+                newWave.GetComponent<WaveBehav>().colorOverLifeTime = playeWaveGradientColor;
+            }
+            if (!isSneaky) yield return walkWait;
+            else yield return walkWaitSneaky;
+        }
 
-	void StopWalkSound(){
-		StopCoroutine ("Walk");
-		isWalking = false;
-	}
+    }
+
+    void StopWalkSound()
+    {
+        StopCoroutine("Walk");
+        isWalking = false;
+    }
 
 
 
-} 
+}

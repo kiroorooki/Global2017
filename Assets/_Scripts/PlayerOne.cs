@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerOne : MonoBehaviour {
-
-	private float playerOneSpeed;
+     
+	private float playerSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
 
@@ -31,6 +31,8 @@ public class PlayerOne : MonoBehaviour {
 
 	bool isWalking = false;
 
+    Vector3 direction = Vector3.zero;
+
 	AudioSource myAudioSource;
 	SoundManager soundManager;
 	WaitForSeconds walkWait = new WaitForSeconds(0.4f);
@@ -41,7 +43,7 @@ public class PlayerOne : MonoBehaviour {
 	public Gradient playeWaveGradientColor;
 
     void Start () {
-		playerOneSpeed = normalSpeed;
+		playerSpeed = normalSpeed;
 		myAudioSource = GetComponent<AudioSource> ();
 		soundManager = SoundManager.singleton;
 	}
@@ -54,7 +56,7 @@ public class PlayerOne : MonoBehaviour {
 		// Déplacement Normal
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("HorizontalP1"), 0, Input.GetAxisRaw ("VerticalP1"));
         
-        Vector3 moveVelocity = moveInput.normalized * playerOneSpeed;
+        Vector3 moveVelocity = moveInput.normalized * playerSpeed;
 		controller.Move (moveVelocity);    
 		if ((Input.GetAxisRaw ("HorizontalP1") == 0 && Input.GetAxisRaw ("VerticalP1") == 0) && isWalking) {
 			StopWalkSound ();
@@ -66,19 +68,25 @@ public class PlayerOne : MonoBehaviour {
 
 		// Déplacement Sneaky
 		if (Input.GetButtonDown ("SlowP1") && AttackON == false) {
-			playerOneSpeed = sneakySpeed;
+			playerSpeed = sneakySpeed;
 			isSneaky = true;
 		}
 		if (Input.GetButtonUp ("SlowP1")) {
-			playerOneSpeed = normalSpeed;
+			playerSpeed = normalSpeed;
 			isSneaky = false;
 		}
-		
+
+
+        if(Input.GetAxisRaw("ShootXP1") != 0 || Input.GetAxisRaw("ShootYP1") != 0)
+            direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, -Input.GetAxisRaw("ShootYP1"))) * (-1f);
+
         AttackP1();
         Projectiles();
+
+
 		
 	}
-	
+    
     void Projectiles()
     {
         // Projectiles
@@ -90,7 +98,7 @@ public class PlayerOne : MonoBehaviour {
 
         if (Input.GetButtonUp("ThrowP1"))
         {
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, -Input.GetAxisRaw("ShootYP1"))) * (-1f);
+            
             if (direction != Vector3.zero)
             {
                 Projectile e = Instantiate(projectile, transform.position, Quaternion.identity);
@@ -114,9 +122,8 @@ public class PlayerOne : MonoBehaviour {
 			StopWalkSound ();
 			AttackSound ();
             AttackON = true;
-            playerOneSpeed = 0;
+            playerSpeed = 0;
 			isSneaky = false;
-            Vector3 direction = (new Vector3(Input.GetAxisRaw("ShootXP1"), 0, -Input.GetAxisRaw("ShootYP1"))) * (-1f);
             
 
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
@@ -133,7 +140,7 @@ public class PlayerOne : MonoBehaviour {
     IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(delay);
-        playerOneSpeed = normalSpeed;
+        playerSpeed = normalSpeed;
         Destroy(AttackCone);
         AttackON = false;
     }
