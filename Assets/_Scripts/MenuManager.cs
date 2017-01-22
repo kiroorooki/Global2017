@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour {
 	public GameObject WaitP3;
 	public GameObject WaitP4;
 
-	public GameObject GameManager;
+	public GameObject gameManager;
 
     public List<GameObject> ninjas = new List<GameObject>();
 
@@ -43,39 +43,39 @@ public class MenuManager : MonoBehaviour {
 	
 	bool GameReady = false;
 
-	GamePadState gamepad1;
-	GamePadState gamepad2;
-	GamePadState gamepad3;
-	GamePadState gamepad4;
-	GamePadState gamepad1_prev_state;
-	GamePadState gamepad2_prev_state;
-	GamePadState gamepad3_prev_state;
-	GamePadState gamepad4_prev_state;
+    public GamePadState gamepad1;
+    public GamePadState gamepad2;
+    public GamePadState gamepad3;
+    public GamePadState gamepad4;
+    public GamePadState gamepad1_prev_state;
+    public GamePadState gamepad2_prev_state;
+    public GamePadState gamepad3_prev_state;
+    public GamePadState gamepad4_prev_state;
 
-	PlayerIndex player1;
-	PlayerIndex player2;
-	PlayerIndex player3;
-	PlayerIndex player4;
+    public PlayerIndex player1_index;
+    public PlayerIndex player2_index;
+    public PlayerIndex player3_index;
+    public PlayerIndex player4_index;
 
-	void Awake() {
-        DontDestroyOnLoad(GameManager);
+    void Awake() {
+        DontDestroyOnLoad(gameManager);
     }
 
 	void Start() {
-		SoundManager.singleton.Play (SoundManager.singleton.musics [0], 1f, Camera.main.GetComponent<AudioSource> ());
-		player1 = (PlayerIndex)0;
-        gamepad1 = GamePad.GetState(player1);
-        player2 = (PlayerIndex)1;
-        gamepad2 = GamePad.GetState(player2);
-        player3 = (PlayerIndex)2;
-        gamepad3 = GamePad.GetState(player3);
-        player4 = (PlayerIndex)3;
-        gamepad4 = GamePad.GetState(player4);
-	}
+        SoundManager.singleton.Play (SoundManager.singleton.musics [0], 1f, Camera.main.GetComponent<AudioSource> ());
+        player1_index = (PlayerIndex)0;
+        gamepad1 = GamePad.GetState(player1_index);
+        player2_index = (PlayerIndex)1;
+        gamepad2 = GamePad.GetState(player2_index);
+        player3_index = (PlayerIndex)2;
+        gamepad3 = GamePad.GetState(player3_index);
+        player4_index = (PlayerIndex)3;
+        gamepad4 = GamePad.GetState(player4_index);
+    }
 
 	void Update() {
 
-		GameObject gameManager = GameObject.Find("GameManager");
+        GameObject gameManager = GameObject.Find("GameManager");
 		GameManager gameScript = gameManager.GetComponent<GameManager>();
 
 		if (onNewGameMenu == true) {
@@ -106,12 +106,12 @@ public class MenuManager : MonoBehaviour {
 				playersReady = playersReady+1;
                 ninjas[0].GetComponent<NinjaRotation>().RapidTurn();
                 ninjas[0].GetComponent<NinjaRotation>().timer = 0.9f;
-				GamePad.SetVibration(player1, 1f, 1f);
+				GamePad.SetVibration(player1_index, 1f, 1f);
 				Invoke("EndAllVibration", .2f);
             }
 			if (Input.GetButtonDown("SubmitP2") && playerTwoReady == false) {
-				FindGamepad(1);
-				gameScript.player2Play = true;
+                FindGamepad(1);
+                gameScript.player2Play = true;
 				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 2 Ready !");
 				WaitP2.SetActive(false);
@@ -120,11 +120,11 @@ public class MenuManager : MonoBehaviour {
 				playersReady = playersReady+1;
                 ninjas[1].GetComponent<NinjaRotation>().RapidTurn();
                 ninjas[1].GetComponent<NinjaRotation>().timer = 0.9f;
-				GamePad.SetVibration(player2, 1f, 1f);
+				GamePad.SetVibration(player2_index, 1f, 1f);
 				Invoke("EndAllVibration", .2f);
             }
 			if (Input.GetButtonDown("SubmitP3") && playerThreeReady == false) {
-				FindGamepad(2);
+                FindGamepad(2);
 				gameScript.player3Play = true;
 				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 3 Ready !");
@@ -134,11 +134,11 @@ public class MenuManager : MonoBehaviour {
 				playersReady = playersReady+1;
                 ninjas[2].GetComponent<NinjaRotation>().RapidTurn();
                 ninjas[2].GetComponent<NinjaRotation>().timer = 0.9f;
-				GamePad.SetVibration(player3, 1f, 1f);
+				GamePad.SetVibration(player3_index, 1f, 1f);
 				Invoke("EndAllVibration", .2f);
             }
 			if (Input.GetButtonDown("SubmitP4") && playerFourReady == false) {
-				FindGamepad(3);
+                FindGamepad(3);
 				gameScript.player4Play = true;
 				SoundManager.singleton.Play (SoundManager.singleton.menu_start,1f,Camera.main.GetComponent<AudioSource> ());
 				Debug.Log("Player 4 Ready !");
@@ -148,7 +148,7 @@ public class MenuManager : MonoBehaviour {
 				playersReady = playersReady+1;
                 ninjas[3].GetComponent<NinjaRotation>().RapidTurn();
                 ninjas[3].GetComponent<NinjaRotation>().timer = 0.9f;
-				GamePad.SetVibration(player4, 1f, 1f);
+				GamePad.SetVibration(player4_index, 1f, 1f);
 				Invoke("EndAllVibration", .2f);
             }
 		}
@@ -173,17 +173,16 @@ public class MenuManager : MonoBehaviour {
 			WaitP3.SetActive(true);
 			WaitP4.SetActive(true);
 		}
-		
-		gamepad1_prev_state = gamepad1;
+        gamepad1_prev_state = gamepad1;
         gamepad2_prev_state = gamepad2;
         gamepad3_prev_state = gamepad3;
         gamepad4_prev_state = gamepad4;
 
-        gamepad1 = GamePad.GetState(player1);
-        gamepad2 = GamePad.GetState(player2);
-        gamepad3 = GamePad.GetState(player3);
-        gamepad4 = GamePad.GetState(player4);
-	}
+        gamepad1 = GamePad.GetState(player1_index);
+        gamepad2 = GamePad.GetState(player2_index);
+        gamepad3 = GamePad.GetState(player3_index);
+        gamepad4 = GamePad.GetState(player4_index);
+    }
 
 	public void NewGame() {
 		SoundManager.singleton.Play (SoundManager.singleton.menu_select_menu_item,1f,Camera.main.GetComponent<AudioSource> ());
@@ -245,61 +244,56 @@ public class MenuManager : MonoBehaviour {
         button.GetComponent<Transform>().transform.DOScale(0.75f, 0.5f);
         //button.GetComponent<Transform>().transform.DORotate(new Vector3(0, 0, 0), 0.5f);
     }
-	
-	void FindGamepad(int i)
+
+    public void FindGamepad(int i)
     {
         PlayerIndex gamepadIndex = 0;
-
+        GameManager gm = GameManager.singleton;
         if (gamepad1_prev_state.Buttons.Start == ButtonState.Released && gamepad1.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)0;
-            print("Gp 1 " + gamepadIndex);
         }
         if (gamepad2_prev_state.Buttons.Start == ButtonState.Released && gamepad2.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)1;
-            print("Gp 2 " + gamepadIndex);
         }
         if (gamepad3_prev_state.Buttons.Start == ButtonState.Released && gamepad3.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)2;
-            print("Gp 3 " + gamepadIndex);
         }
         if (gamepad4_prev_state.Buttons.Start == ButtonState.Released && gamepad4.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)3;
-            print("Gp 4 " + gamepadIndex);
         }
 
         if (i == 0)
         {
-            player1 = gamepadIndex;
-            print("P 1 :" + gamepadIndex);
+            player1_index = gamepadIndex;
+            GameManager.singleton.player1_index = gamepadIndex;
         }
-        else if(i == 1)
+        else if (i == 1)
         {
-            player2 = gamepadIndex;
-            print("P 2 :" + gamepadIndex);
+            player2_index = gamepadIndex;
+            GameManager.singleton.player2_index = gamepadIndex;
         }
         else if (i == 2)
         {
-            player3 = gamepadIndex;
-            print("P 3 :" + gamepadIndex);
+            player3_index = gamepadIndex;
+            GameManager.singleton.player3_index = gamepadIndex;
         }
         else if (i == 3)
         {
-            player4 = gamepadIndex;
-            print("P 4 :" + gamepadIndex);
+            player4_index = gamepadIndex;
+            GameManager.singleton.player4_index = gamepadIndex;
         }
     }
-	
-	
-	
-	void EndAllVibration(){
-		GamePad.SetVibration(player1, 0f, 0f);
-		GamePad.SetVibration(player2, 0f, 0f);
-		GamePad.SetVibration(player3, 0f, 0f);
-		GamePad.SetVibration(player4, 0f, 0f);
-	}
+
+    public void EndAllVibration()
+    {
+        GamePad.SetVibration(player1_index, 0f, 0f);
+        GamePad.SetVibration(player2_index, 0f, 0f);
+        GamePad.SetVibration(player3_index, 0f, 0f);
+        GamePad.SetVibration(player4_index, 0f, 0f);
+    }
 
 }

@@ -7,6 +7,7 @@ public class XInputTestCS : MonoBehaviour
     PlayerIndex playerIndex;
     GamePadState state;
     GamePadState prevState;
+    GameManager gameManager;
 
     // Use this for initialization
     void Start()
