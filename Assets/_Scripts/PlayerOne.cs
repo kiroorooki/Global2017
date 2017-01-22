@@ -25,9 +25,9 @@ public class PlayerOne : MonoBehaviour {
     bool AttackON = false;
 	bool isSneaky = false;
 
-	bool isWalkingOnWood = false;
-	bool isWalkingOnWater = false;
-	bool isWalkingOnGrass = false;
+	public bool isWalkingOnWood = false;
+	public bool isWalkingOnWater = false;
+	public bool isWalkingOnGrass = false;
 
 	bool isWalking = false;
 
@@ -179,7 +179,7 @@ public class PlayerOne : MonoBehaviour {
 				walkSound = soundManager.footStepGround;
 			soundId = Random.Range (0, walkSound.Count - 1);
 			soundManager.Play (walkSound [soundId], 1, myAudioSource);
-			if (!isSneaky) { // pop onde
+			if (!isSneaky || isWalkingOnWater) { // pop onde
 				GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
 				newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
 			}
