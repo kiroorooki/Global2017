@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using XInputDotNetPure;
 
 public class PlayerTwo : MonoBehaviour {
 
 	private float playerSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
+    public float deathVibrationTime;
 
-	float holdButtonTime = 0f;
+    float holdButtonTime = 0f;
 	public float maxForce;
 	public float timeToMax;
 
@@ -31,7 +33,7 @@ public class PlayerTwo : MonoBehaviour {
 
 	bool isWalking = false;
 
-	Vector3 direction = Vector3.zero;
+    Vector3 direction = Vector3.zero;
 
 	AudioSource myAudioSource;
 	SoundManager soundManager;
@@ -133,8 +135,9 @@ public class PlayerTwo : MonoBehaviour {
 			AttackCone.transform.parent = transform;
 			AttackCone.transform.LookAt(transform.position + direction);
 			AttackCone.GetComponent<Death> ().myAudiosource = myAudioSource;
+            AttackCone.GetComponent<Death>().playerGamepadId = 2;
 
-			Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
+            Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
 			StartCoroutine(DelayAttack());
 			MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
 
@@ -158,6 +161,12 @@ public class PlayerTwo : MonoBehaviour {
 		Debug.Log("Touche " + other);
 		Destroy(other.gameObject);
 	}
+
+    void OnDestroy()
+    {
+        GamePad.SetVibration(GameManager.singleton.player2_index, 1f, 1f);
+        GameManager.singleton.EndAllVibrationDelay(deathVibrationTime);
+    }
 
 	void AttackSound(){
 		int soundId;

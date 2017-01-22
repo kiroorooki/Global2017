@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         singleton = this;
+        DontDestroyOnLoad(this);
     }
 
     // Use this for initialization
@@ -58,11 +59,12 @@ public class GameManager : MonoBehaviour
     bool notDone = true;
     void Update()
     {
-
+        print("tkerojhi" + playersSpawn + "titi : " + SceneManager.GetActiveScene().name);
         if (playersSpawn == false && SceneManager.GetActiveScene().name == "Main")
         {
             StartCoroutine(ActivatePlayer());
             playersSpawn = true;
+            
 
         }
         else if (SceneManager.GetActiveScene().name == "Main")
@@ -120,6 +122,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
+    public void EndAllVibrationDelay(float delay)
+    {
+        Invoke("EndAllVibration", delay);
+    }
+
+    public void EndAllVibration()
+    {
+        GamePad.SetVibration(player1_index, 0f, 0f);
+        GamePad.SetVibration(player2_index, 0f, 0f);
+        GamePad.SetVibration(player3_index, 0f, 0f);
+        GamePad.SetVibration(player4_index, 0f, 0f);
+    }
 
 }

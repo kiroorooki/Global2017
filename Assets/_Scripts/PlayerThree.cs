@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using XInputDotNetPure;
 
 public class PlayerThree : MonoBehaviour {
 
 	private float playerSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
+    public float deathVibrationTime;
 
-	float holdButtonTime = 0f;
+    float holdButtonTime = 0f;
 	public float maxForce;
 	public float timeToMax;
 
@@ -31,7 +33,7 @@ public class PlayerThree : MonoBehaviour {
 
 	bool isWalking = false;
 
-	Vector3 direction = Vector3.zero;
+    Vector3 direction = Vector3.zero;
 
 	AudioSource myAudioSource;
 	SoundManager soundManager;
@@ -84,9 +86,6 @@ public class PlayerThree : MonoBehaviour {
 
 		AttackP3();
 		Projectiles();
-
-
-
 	}
 
 	void Projectiles()
@@ -119,8 +118,6 @@ public class PlayerThree : MonoBehaviour {
 		// Attaque
 		if (Input.GetButtonDown("FireP3") && AttackON == false)
 		{
-
-
 			GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
 			newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
 			StopWalkSound ();
@@ -134,7 +131,8 @@ public class PlayerThree : MonoBehaviour {
 			AttackCone.transform.LookAt(transform.position + direction);
 			AttackCone.GetComponent<Death> ().myAudiosource = myAudioSource;
 
-			Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
+
+            Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
 			StartCoroutine(DelayAttack());
 			MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
 
@@ -159,7 +157,13 @@ public class PlayerThree : MonoBehaviour {
 		Destroy(other.gameObject);
 	}
 
-	void AttackSound(){
+    void OnDestroy()
+    {
+        GamePad.SetVibration(GameManager.singleton.player3_index, 1f, 1f);
+        GameManager.singleton.EndAllVibrationDelay(deathVibrationTime);
+    }
+
+    void AttackSound(){
 		int soundId;
 		soundId = Random.Range (0, soundManager.bladeWoosh.Count - 1);
 		soundManager.Play (soundManager.bladeWoosh [soundId], 1, myAudioSource);

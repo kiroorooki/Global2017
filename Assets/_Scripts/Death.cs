@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using XInputDotNetPure;
 
-public class Death : MonoBehaviour {
+public class Death : MonoBehaviour
+{
 
 
     List<GameObject> BloodpatternList = new List<GameObject>();
@@ -13,35 +15,38 @@ public class Death : MonoBehaviour {
     public GameObject Bloodpattern4;
     public GameObject Bloodpattern5;
     public GameObject Bloodpattern6;
-	public AudioSource myAudiosource;
+    public AudioSource myAudiosource;
+    public int playerGamepadId;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         BloodpatternList.Add(Bloodpattern1);
         BloodpatternList.Add(Bloodpattern2);
         BloodpatternList.Add(Bloodpattern3);
         BloodpatternList.Add(Bloodpattern4);
         BloodpatternList.Add(Bloodpattern5);
         BloodpatternList.Add(Bloodpattern6);
-
-       
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-    void OnTriggerEnter (Collider other)
+    // Update is called once per frame
+    void Update()
     {
-		if (other.tag == "Player") 
-		{
-			int i = Random.Range(0, 1);
-			SoundManager.singleton.Play(SoundManager.singleton.blood[i], 1, myAudiosource);
-			Camera.main.transform.DOShakePosition (1f, 0.5f, 20, 90);
-			Destroy (other.gameObject);
+
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            int i = Random.Range(0, 1);
+            SoundManager.singleton.Play(SoundManager.singleton.blood[i], 1, myAudiosource);
+            Camera.main.transform.DOShakePosition(1f, 0.5f, 20, 90);
+            Destroy(other.gameObject);
             int BloodpatternIndex = UnityEngine.Random.Range(0, 6);
-            Instantiate(BloodpatternList[BloodpatternIndex], new Vector3( other.transform.position.x,0.1f,other.transform.position.z),transform.rotation);
-		}
+            Instantiate(BloodpatternList[BloodpatternIndex], new Vector3(other.transform.position.x, 0.1f, other.transform.position.z), transform.rotation);
+
+        }
+
     }
 }

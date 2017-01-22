@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using XInputDotNetPure;
 
 public class PlayerFour : MonoBehaviour {
 
 	private float playerSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
+    public float deathVibrationTime;
 
-	float holdButtonTime = 0f;
+
+    float holdButtonTime = 0f;
 	public float maxForce;
 	public float timeToMax;
 
@@ -31,7 +34,7 @@ public class PlayerFour : MonoBehaviour {
 
 	bool isWalking = false;
 
-	Vector3 direction = Vector3.zero;
+    Vector3 direction = Vector3.zero;
 
 	AudioSource myAudioSource;
 	SoundManager soundManager;
@@ -134,7 +137,7 @@ public class PlayerFour : MonoBehaviour {
 			AttackCone.transform.LookAt(transform.position + direction);
 			AttackCone.GetComponent<Death> ().myAudiosource = myAudioSource;
 
-			Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
+            Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
 			StartCoroutine(DelayAttack());
 			MeshCollider ConeMesh = AttackCone.GetComponent<MeshCollider>();
 
@@ -159,7 +162,13 @@ public class PlayerFour : MonoBehaviour {
 		Destroy(other.gameObject);
 	}
 
-	void AttackSound(){
+    void OnDestroy()
+    {
+        GamePad.SetVibration(GameManager.singleton.player4_index, 1f, 1f);
+        GameManager.singleton.EndAllVibrationDelay(deathVibrationTime);
+    }
+
+    void AttackSound(){
 		int soundId;
 		soundId = Random.Range (0, soundManager.bladeWoosh.Count - 1);
 		soundManager.Play (soundManager.bladeWoosh [soundId], 1, myAudioSource);

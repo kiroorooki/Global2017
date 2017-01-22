@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using XInputDotNetPure;
 
 public class PlayerOne : MonoBehaviour {
      
 	private float playerSpeed;
 	public float normalSpeed;
 	public float sneakySpeed;
+    public float deathVibrationTime;
 
     float holdButtonTime = 0f;
     public float maxForce;
@@ -159,7 +161,13 @@ public class PlayerOne : MonoBehaviour {
         Destroy(other.gameObject);
     }
 
-	void AttackSound(){
+    void OnDestroy()
+    {
+        GamePad.SetVibration(GameManager.singleton.player1_index, 1f, 1f);
+        GameManager.singleton.EndAllVibrationDelay(deathVibrationTime);
+    }
+
+    void AttackSound(){
 		int soundId;
 		soundId = Random.Range (0, soundManager.bladeWoosh.Count - 1);
 		soundManager.Play (soundManager.bladeWoosh [soundId], 1, myAudioSource);

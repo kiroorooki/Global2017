@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour {
 	public GameObject WaitP3;
 	public GameObject WaitP4;
 
-	public GameObject gameManager;
+	public GameObject GameManager;
 
     public List<GameObject> ninjas = new List<GameObject>();
 
@@ -58,7 +58,7 @@ public class MenuManager : MonoBehaviour {
     public PlayerIndex player4_index;
 
     void Awake() {
-        DontDestroyOnLoad(gameManager);
+        
     }
 
 	void Start() {
@@ -248,44 +248,53 @@ public class MenuManager : MonoBehaviour {
     public void FindGamepad(int i)
     {
         PlayerIndex gamepadIndex = 0;
-        GameManager gm = GameManager.singleton;
+        GameManager gm = global::GameManager.singleton;
         if (gamepad1_prev_state.Buttons.Start == ButtonState.Released && gamepad1.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)0;
+            //print("^pp");
         }
         if (gamepad2_prev_state.Buttons.Start == ButtonState.Released && gamepad2.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)1;
+            //print("^pp2");
         }
         if (gamepad3_prev_state.Buttons.Start == ButtonState.Released && gamepad3.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)2;
+            //print("^pp3");
         }
         if (gamepad4_prev_state.Buttons.Start == ButtonState.Released && gamepad4.Buttons.Start == ButtonState.Pressed)
         {
             gamepadIndex = (PlayerIndex)3;
+            //print("^pp4");
         }
 
         if (i == 0)
         {
             player1_index = gamepadIndex;
-            GameManager.singleton.player1_index = gamepadIndex;
+            global::GameManager.singleton.player1_index = gamepadIndex;
         }
         else if (i == 1)
         {
             player2_index = gamepadIndex;
-            GameManager.singleton.player2_index = gamepadIndex;
+            global::GameManager.singleton.player2_index = gamepadIndex;
         }
         else if (i == 2)
         {
             player3_index = gamepadIndex;
-            GameManager.singleton.player3_index = gamepadIndex;
+            global::GameManager.singleton.player3_index = gamepadIndex;
         }
         else if (i == 3)
         {
             player4_index = gamepadIndex;
-            GameManager.singleton.player4_index = gamepadIndex;
+            global::GameManager.singleton.player4_index = gamepadIndex;
         }
+    }
+
+    public void EndAllVibrationDelay(float delay)
+    {
+        Invoke("EndAllVibration", delay);
     }
 
     public void EndAllVibration()
