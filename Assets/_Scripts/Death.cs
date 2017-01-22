@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Death : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class Death : MonoBehaviour {
     public GameObject Bloodpattern4;
     public GameObject Bloodpattern5;
     public GameObject Bloodpattern6;
+	public AudioSource myAudiosource;
 
     // Use this for initialization
     void Start () {
@@ -34,10 +36,12 @@ public class Death : MonoBehaviour {
     {
 		if (other.tag == "Player") 
 		{
+			int i = Random.Range(0, 1);
+			SoundManager.singleton.Play(SoundManager.singleton.blood[i], 1, myAudiosource);
+			Camera.main.transform.DOShakePosition (1f, 0.5f, 20, 90);
 			Destroy (other.gameObject);
             int BloodpatternIndex = UnityEngine.Random.Range(0, 6);
             Instantiate(BloodpatternList[BloodpatternIndex], new Vector3( other.transform.position.x,0.1f,other.transform.position.z),transform.rotation);
-
 		}
     }
 }

@@ -129,10 +129,10 @@ public class PlayerOne : MonoBehaviour {
             playerSpeed = 0;
 			isSneaky = false;
             
-
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
             AttackCone.transform.parent = transform;
             AttackCone.transform.LookAt(transform.position + direction);
+			AttackCone.GetComponent<Death> ().myAudiosource = myAudioSource;
 
             Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
             StartCoroutine(DelayAttack());
@@ -140,7 +140,7 @@ public class PlayerOne : MonoBehaviour {
 
             GameObject SlashEffect = Instantiate(SlashP1, AttackCone.transform.position + AttackCone.transform.forward, AttackCone.transform.rotation);
             SlashEffect.transform.parent = transform;
-            SlashEffect.transform.LookAt(transform.position + direction);
+			SlashEffect.transform.LookAt(transform.position + direction*10f) ;
             Destroy(SlashEffect.gameObject, 1);
         }
     }
@@ -156,9 +156,6 @@ public class PlayerOne : MonoBehaviour {
     void OntriggerEnter(Collider other)
     {
         Debug.Log("Touche " + other);
-        //Instantiate (Blood, other.transform.position, other.transform.rotation)
-        int i = Random.Range(0, 1);
-        soundManager.Play(soundManager.blood[i], 1, myAudioSource);
         Destroy(other.gameObject);
     }
 
