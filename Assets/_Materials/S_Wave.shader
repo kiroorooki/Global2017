@@ -103,9 +103,7 @@ Shader "Custom/S_Wave" {
                 float2 node_6969 = (float2(i.screenPos.x*(_ScreenParams.r/_ScreenParams.g), i.screenPos.y).rg+(float2(_USpeed,_VSpeed)*node_3251.g));
                 float4 node_772 = tex2D(_Noise,TRANSFORM_TEX(node_6969, _Noise));
                 float node_4408 = (max(lerp((node_2691_if_leA*node_7990)+(node_2691_if_leB*node_9693),node_7990,node_2691_if_leA*node_2691_if_leB),lerp((node_1229_if_leA*node_7990)+(node_1229_if_leB*node_711),node_7990,node_1229_if_leA*node_1229_if_leB))*saturate(((1.0 - _NoiseIntensity)+saturate(node_772.r))));
-                float3 node_5754 = (_Color.rgb*_Color.a*i.vertexColor.rgb*i.vertexColor.a*node_4408);
-                float3 node_249 = (_EmissionIntensity*node_5754);
-                float3 emissive = node_249;
+                float3 emissive = (_EmissionIntensity*(_Color.rgb*_Color.a*i.vertexColor.rgb*i.vertexColor.a*node_4408));
                 float3 finalColor = emissive;
                 fixed4 finalRGBA = fixed4(finalColor,(i.vertexColor.a*node_4408*_Color.a));
                 UNITY_APPLY_FOG(i.fogCoord, finalRGBA);

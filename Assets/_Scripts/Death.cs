@@ -17,10 +17,12 @@ public class Death : MonoBehaviour
     public GameObject Bloodpattern6;
     public AudioSource myAudiosource;
     public int playerGamepadId;
+    public GameObject playerParent;
 
     // Use this for initialization
     void Start()
     {
+        Destroy(this.gameObject, .1f);
         BloodpatternList.Add(Bloodpattern1);
         BloodpatternList.Add(Bloodpattern2);
         BloodpatternList.Add(Bloodpattern3);
@@ -39,13 +41,15 @@ public class Death : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            Camera.main.transform.DOShakePosition(1f, 0.5f, 20, 90);
+            print(" ttuytutyu " + playerGamepadId + "momo");
+            GameManager.singleton.playersScore[playerGamepadId] ++;
             int i = Random.Range(0, 1);
             SoundManager.singleton.Play(SoundManager.singleton.blood[i], 1, myAudiosource);
-            Camera.main.transform.DOShakePosition(1f, 0.5f, 20, 90);
             Destroy(other.gameObject);
             int BloodpatternIndex = UnityEngine.Random.Range(0, 6);
             Instantiate(BloodpatternList[BloodpatternIndex], new Vector3(other.transform.position.x, 0.1f, other.transform.position.z), transform.rotation);
-
+            GameManager.singleton.CheckEndGame(playerGamepadId);
         }
 
     }

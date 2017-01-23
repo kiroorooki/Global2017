@@ -134,7 +134,11 @@ public class PlayerOne : MonoBehaviour {
             AttackCone = Instantiate(Cone, transform.position, Quaternion.identity);
             AttackCone.transform.parent = transform;
             AttackCone.transform.LookAt(transform.position + direction);
-			AttackCone.GetComponent<Death> ().myAudiosource = myAudioSource;
+
+            Death myDeath = AttackCone.GetComponent<Death>();
+            myDeath.myAudiosource = myAudioSource;
+            myDeath.playerGamepadId = 1;
+            myDeath.playerParent = this.gameObject;
 
             Physics.IgnoreCollision(AttackCone.GetComponent<Collider>(), GetComponent<Collider>());
             StartCoroutine(DelayAttack());
@@ -163,8 +167,11 @@ public class PlayerOne : MonoBehaviour {
 
     void OnDestroy()
     {
-        GamePad.SetVibration(GameManager.singleton.player1_index, 1f, 1f);
-        GameManager.singleton.EndAllVibrationDelay(deathVibrationTime);
+        if (GameManager.singleton.gameOn)
+        {
+            GamePad.SetVibration(GameManager.singleton.player1_index, 1f, 1f);
+            GameManager.singleton.EndAllVibrationDelay(deathVibrationTime);
+        }
     }
 
     void AttackSound(){
@@ -191,7 +198,18 @@ public class PlayerOne : MonoBehaviour {
 				GameObject newWave = Instantiate (wave, transform.position + new Vector3(0f,0f,0f), Quaternion.identity);
 				newWave.GetComponent<WaveBehav> ().colorOverLifeTime = playeWaveGradientColor;
 			}
-			if(!isSneaky) yield return walkWait;
+            if (!isSneaky || isWalkingOnWood)
+            { // pop onde
+                GameObject newWave = Instantiate(wave, transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity);
+                newWave.GetComponent<WaveBehav>().colorOverLifeTime = playeWaveGradientColor;
+            }
+            if (!isSneaky || isWalkingOnGrass)
+            { // pop onde
+                GameObject newWave = Instantiate(wave, transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity);
+                newWave.GetComponent<WaveBehav>().colorOverLifeTime = playeWaveGradientColor;
+            }
+
+            if (!isSneaky) yield return walkWait;
 			else yield return walkWaitSneaky;
 		}
 
@@ -201,7 +219,6 @@ public class PlayerOne : MonoBehaviour {
 		StopCoroutine ("Walk");
 		isWalking = false;
 	}
-
 
 
 } 
